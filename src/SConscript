@@ -1,0 +1,10 @@
+Import('env')
+libenv = env.Clone()
+
+libcashaccount = libenv.SharedLibrary('cashaccount', [libenv.Glob('#/src/*cpp')])
+
+tests, test_result = libenv.SConscript('#/src/test/SConscript',
+    exports=['env', 'libcashaccount'])
+libenv.Depends(tests, libcashaccount)
+
+Return(['libcashaccount', 'tests', 'test_result'])

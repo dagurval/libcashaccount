@@ -1,0 +1,12 @@
+*.o
+*.a
+*.os
+*.so
+.sconsign.dblite
+*.pyc
+*.log
+*.swp
+src/test/test_cashaccount
+doxygen/
+rustbindingstest/Cargo.lock
+rustbindingstest/target

@@ -1,0 +1,29 @@
+Import('env', 'libcashaccount')
+import os
+
+rustenv = env.Clone()
+
+rustenv['ENV']['PATH'] = os.environ['PATH']
+rustenv['ENV']['LD_LIBRARY_PATH'] = str(rustenv.Dir("#/src"))
+
+def cargo_cmd(cmd, target, extra = []):
+    return [["cargo", cmd, "--release",
+            "--manifest-path", "rustbindingstest/Cargo.toml"] \
+            + extra + [">"] + target]
+
+
+def cargobuild(source, target, env, for_signature):
+    return cargo_cmd("build", target)
+
+def cargotest(source, target, env, for_signature):
+    return cargo_cmd("test", target)
+
+rustenv['BUILDERS']['CargoBuild'] = env.Builder(generator = cargobuild)
+rustenv['BUILDERS']['CargoTest'] = env.Builder(generator = cargotest)
+
+buildlog = rustenv.CargoBuild(["#/rustbindingstest/build.log"], libcashaccount)
+testlog = rustenv.CargoTest(["#/rustbindingstest/test.log"], libcashaccount)
+Depends(buildlog, env.Glob("#/rustbindingstest/src/*rs"))
+Depends(testlog, env.Glob("#/rustbindingstest/src/*rs"))
+
+Return('buildlog', 'testlog')

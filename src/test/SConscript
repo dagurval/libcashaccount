@@ -1,0 +1,17 @@
+Import(['env', 'libcashaccount'])
+testEnv = env.Clone()
+
+test_files = testEnv.Glob("#/src/test/*cpp")
+
+tests = testEnv.Program('test_cashaccount',
+    [test_files],
+    LIBS=[libcashaccount, 'boost_unit_test_framework'])
+
+def testrunner(source, target, env, for_signature):
+    return [source + [">"] + target]
+testEnv['BUILDERS']['RunTests'] = testEnv.Builder(generator = testrunner)
+
+test_result = testEnv.RunTests("#/src/test/result.log", tests)
+Depends(test_result, libcashaccount)
+
+Return(['tests', 'test_result'])
