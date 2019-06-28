@@ -1,5 +1,6 @@
 env = Environment(
     CPPPATH=["#/src", "#/includes"],
+    CPPFLAGS=["-Wall", "-Wextra"],
     tools = ["default", "doxygen"])
 
 AddOption('--dbg', dest='debug', action='store_true', help='enable debug symbols')

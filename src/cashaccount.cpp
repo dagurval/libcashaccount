@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <regex>
 #include <vector>
 
@@ -19,7 +20,7 @@ static const char CASHACCOUNT_PREFIX[6] = {
 CashAccount *cashacc_account_init() {
   CashAccount *account =
       static_cast<CashAccount *>(std::malloc(sizeof(CashAccount)));
-  memset(account, 0, sizeof(CashAccount));
+  std::memset(account, 0, sizeof(CashAccount));
   return account;
 }
 
@@ -59,7 +60,7 @@ int cashacc_parse_opreturn(const char *opreturn, unsigned int len,
   // parts.second is the length of the part
   std::vector<std::pair<int, int>> parts;
 
-  for (int i = CASHACCOUNT_PREFIX_LENGTH; i < len; ++i) {
+  for (unsigned int i = CASHACCOUNT_PREFIX_LENGTH; i < len; ++i) {
     uint32_t push = 0;
 
     const char &opcode = *(opreturn + i);
@@ -123,7 +124,7 @@ int cashacc_parse_opreturn(const char *opreturn, unsigned int len,
   if (account->name == nullptr) {
     return CASHACC_ERR_MALLOC_FAILED;
   }
-  memcpy(account->name, name_start, name_len);
+  std::memcpy(account->name, name_start, name_len);
   account->name[name_len] = '\0';
 
   if (store_payload) {
