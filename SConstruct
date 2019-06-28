@@ -18,7 +18,7 @@ doxygen = env.Doxygen("Doxyfile")
 format = env.Command(
     source = ".clang-format",
     target = "dummyformat",
-    action = "clang-format-9 -i ./src/*.cpp ./includes/*hpp ./src/test/*.cpp ./src/test/*.h")
+    action = "clang-format-8 -i ./src/*.cpp ./includes/*hpp ./src/test/*.cpp ./src/test/*.h")
 AlwaysBuild(format)
 
 build_lib = [libcashaccount, tests, test_result]
